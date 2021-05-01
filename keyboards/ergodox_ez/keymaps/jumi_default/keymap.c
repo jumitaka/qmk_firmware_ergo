@@ -8,13 +8,11 @@
 #define KCRDP_WIN LALT(KC_HOME)
 #define KCRDP_PSCR LALT(LCTL(KC_PPLS))
 #define KCRDP_BRK LALT(LCTL(KC_BRK))
-#define IME_OFF KC_MHEN
-#define IME_ON KC_HENK
 
 enum layers {
     L_COMMON = 0,
     L_WIN,
-    L_RDP,
+    L_MAC,
     L_QWERTY,
     L_FUNC,
     L_NAV,
@@ -27,37 +25,24 @@ enum taps {
 };
 
 enum custom_keycodes {
-    // lang
-    EISU = SAFE_RANGE,
-    KANA,
-
     //--layers--
-    // layouts
-    QWERTY,
-    NAV,
-
-    // momentary layer
-    FUNC,
-    CONF,
-    RDP,
-
-    // os
-    WIN,
+    // os(default layer)
+    OS_TGL = SAFE_RANGE,
     DEF_IME,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [L_COMMON] = LAYOUT_ergodox_pretty(
     // left hand
-    KC_ESC,     KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       CONF,           TG(L_FUNC), KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       _______,
+    KC_ESC,     KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       MO(L_CONF),     _______,    KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       _______,
     KC_TAB,     _______,    _______,    _______,    _______,    _______,    _______,        KC_UP,      _______,    _______,    _______,    _______,    _______,    _______,
-    FUNC,       _______,    _______,    _______,    _______,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
+    MO(L_FUNC), _______,    _______,    _______,    _______,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
     KC_LSFT,    _______,    _______,    _______,    _______,    _______,    KC_DELT,        KC_DOWN,    _______,    _______,    _______,    _______,    _______,    _______,
-    RDP,        _______,    _______,    _______,    _______,                                                        KC_BSPC,    _______,    _______,    _______,    _______,
+    _______,    _______,    _______,    _______,    _______,                                                        KC_BSPC,    _______,    _______,    _______,    _______,
 
                                                                 _______,    _______,        KC_LEFT,    KC_RGHT,
                                                                             _______,        _______,
-                                                    KC_SPC,     IME_OFF,    _______,        MO(L_FUNC), IME_ON,     KC_ENT
+                                                    KC_SPC,     _______,    _______,        MO(L_FUNC), _______,     KC_ENT
 ),
 
 [L_WIN] = LAYOUT_ergodox_pretty(
@@ -70,22 +55,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                                                                 KC_APP,     KC_PSCR,        _______,    _______,
                                                                             KC_BRK,         _______,                                                                   
-                                                    _______,    _______,    _______,        _______,    _______,    _______
+                                                    _______,    KC_MHEN,    DEF_IME,        _______,    KC_HENK,    _______
 ),
 
-[L_RDP] = LAYOUT_ergodox_pretty(
+[L_MAC] = LAYOUT_ergodox_pretty(
     // left hand
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
-    KCRDP_TAB,  _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
+    _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
-    _______,    _______,    KCRDP_WIN,  _______,    _______,                                                        _______,    _______,    _______,    _______,    _______,
+    _______,    KC_F7,      KC_LCTL,    KC_LALT,    KC_LGUI,                                                        _______,    _______,    _______,    _______,    _______,
 
-                                                                _______,    KCRDP_PSCR,     _______,    _______,
-                                                                            KCRDP_BRK,      _______,
-                                                    _______,    _______,    DEF_IME,        _______,    _______,    _______
+                                                                KC_APP,     _______,        _______,    _______,
+                                                                            _______,        _______,
+                                                    _______,    KC_LANG2,   _______,        _______,    KC_LANG1,    _______
 ),
-
 
 [L_QWERTY] = LAYOUT_ergodox_pretty(
     // left hand
@@ -113,21 +97,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                     _______,    _______,    _______,        _______,    _______,    _______
 ),
 
-[L_NAV] = LAYOUT_ergodox_pretty(
+[L_NAV] = LAYOUT_ergodox_pretty(    
     // left hand
-    _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    QWERTY,
-    _______,    _______,    _______,    _______,    _______,    _______,    _______,        KC_WH_U,    _______,    _______,    KC_MS_U,    _______,    _______,    _______,
-    _______,    _______,    _______,    _______,    _______,    _______,                                _______,    KC_MS_L,    KC_MS_D,    KC_MS_R,    _______,    _______,
+    _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
+    _______,    _______,    KC_UP,      _______,    _______,    _______,    _______,        KC_WH_U,    _______,    _______,    KC_MS_U,    _______,    _______,    _______,
+    _______,    KC_LEFT,    KC_DOWN,    KC_RGHT,    _______,    _______,                                _______,    KC_MS_L,    KC_MS_D,    KC_MS_R,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        KC_WH_D,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,                                                        KC_MS_BTN2, _______,    _______,    _______,    _______,
 
                                                                 _______,    _______,        KC_WH_L,    KC_WH_R,
-                                                                            _______,        _______,
+                                                                            _______,        TO(L_QWERTY),
                                                     _______,    _______,    _______,        _______,    _______,    KC_MS_BTN1
 ),
 [L_CONF] = LAYOUT_ergodox_pretty(
     // left hand
-    _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    RESET,
+    _______,    _______,    _______,    _______,    _______,    _______,    _______,        OS_TGL,     _______,    _______,    _______,    _______,    _______,    RESET,
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
@@ -135,7 +119,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                                                                 _______,    _______,        _______,    _______,
                                                                             _______,        _______,
-                                                    _______,    _______,    _______,        _______,    QWERTY,     NAV
+                                                    _______,    _______,    _______,        TO(L_NAV),  _______,    _______
 )
 };
 
@@ -144,48 +128,35 @@ void persistant_default_layer_set(uint16_t default_layer) {
     default_layer_set(default_layer);
 };
 
-void switch_layer (uint8_t layer, bool on) {
-    if (on) {
-        layer_on(layer);
-    } else {
-        layer_off(layer);
-    }
-};
-
 void type_code(uint8_t keycode){
     register_code (keycode);
     unregister_code (keycode);
 };
 
-void set_eisu(void){
-    type_code (KC_F15);
-    type_code (KC_LANG2);
-};
-
-void set_kana(void){
-    type_code (KC_F16);
-    type_code (KC_LANG1);
-};
-
+void toggle_default_layer(void){
+    switch(biton32(default_layer_state)) {
+        case L_WIN:
+            persistant_default_layer_set(1UL<<L_MAC);
+            layer_move(L_QWERTY);
+            break;
+        case L_MAC:
+            persistant_default_layer_set(1UL<<L_WIN);
+            layer_move(L_QWERTY);
+            break;
+        default:
+            // none
+            break;
+    }
+}
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        // lang
-        case EISU:
-            if (record->event.pressed) {
-                set_eisu();
-            }
-            return false;
-            break;
-        case KANA:
-            if (record->event.pressed) {
-                set_kana();
-            }
-            return false;
-            break;
         case DEF_IME:
             if (record->event.pressed) {
                 register_code (KC_LALT);
                 register_code (KC_GRAVE);
+            }
+            else
+            {
                 unregister_code (KC_GRAVE);
                 unregister_code (KC_LALT);
             }
@@ -193,47 +164,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             break;
 
         //--layers--
-        //layout
-        case QWERTY:
+        //os(default layer)
+        case OS_TGL:
             if (record->event.pressed) {
-                layer_move(L_QWERTY);
-            }
-            return false;
-            break;
-        case NAV:
-            if (record->event.pressed) {
-                layer_move(L_NAV);
-            }
-            return false;
-            break;
-
-        //momentary layer
-        case FUNC:
-            switch_layer(L_FUNC, record->event.pressed);
-            return false;
-            break;
-        case CONF:
-            switch_layer(L_CONF, record->event.pressed);
-            return false;
-            break;
-        case RDP:
-            switch_layer(L_RDP, record->event.pressed);
-            /*
-            if (record->event.pressed) {
-                register_code (KC_LALT);
-            }
-            else
-            {
-                unregister_code (KC_LALT);
-            }
-            */
-            return false;
-            break;
-
-        //os
-        case WIN:
-            if (record->event.pressed) {
-                persistant_default_layer_set(1UL<<L_WIN);
+                toggle_default_layer();
             }
             return false;
             break;
@@ -258,26 +192,32 @@ void matrix_init_user(void) {
 
 // Runs constantly in the background, in a loop.
 void matrix_scan_user(void) {
-
-    uint8_t layer = biton32(layer_state);
-
     ergodox_board_led_off();
     ergodox_right_led_1_off();
     ergodox_right_led_2_off();
     ergodox_right_led_3_off();
-    switch (layer) {
-      // TODO: Make this relevant to the ErgoDox EZ.
-        case L_QWERTY:
+
+    switch(biton32(default_layer_state)) {
+        case L_WIN:
             ergodox_right_led_1_on();
             break;
+        case L_MAC:
+            ergodox_right_led_3_on();
+            break;
+        default:
+            // none
+            break;
+    }
+
+    uint8_t layer = biton32(layer_state);
+
+    switch (layer) {
+      // TODO: Make this relevant to the ErgoDox EZ.
         case L_FUNC:
             ergodox_right_led_2_on();
             break;
         case L_NAV:
-            ergodox_right_led_3_on();
-            break;
-        case L_RDP:
-            ergodox_right_led_2_on();
+            ergodox_right_led_1_on();
             ergodox_right_led_3_on();
             break;
         case L_CONF:
