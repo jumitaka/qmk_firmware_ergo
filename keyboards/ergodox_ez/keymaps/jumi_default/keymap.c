@@ -107,7 +107,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                                                                 _______,    _______,        KC_WH_L,    KC_WH_R,
                                                                             _______,        TO(L_QWERTY),
-                                                    _______,    _______,    _______,        _______,    _______,    KC_MS_BTN1
+                                                    KC_MS_BTN1, KC_MS_BTN2, _______,        _______,    KC_MS_BTN1, KC_MS_BTN2
 ),
 [L_CONF] = LAYOUT_ergodox_pretty(
     // left hand
