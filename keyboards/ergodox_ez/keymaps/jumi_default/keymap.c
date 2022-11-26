@@ -8,6 +8,8 @@
 #define KCRDP_WIN LALT(KC_HOME)
 #define KCRDP_PSCR LALT(LCTL(KC_PPLS))
 #define KCRDP_BRK LALT(LCTL(KC_BRK))
+#define KC_MCTL KC_MISSION_CONTROL
+#define KC_LPAD KC_LAUNCHPAD
 
 enum layers {
     L_COMMON = 0,
@@ -15,6 +17,7 @@ enum layers {
     L_MAC,
     L_QWERTY,
     L_FUNC,
+    L_MAC_FN,
     L_NAV,
     L_CONF,
 };
@@ -29,6 +32,8 @@ enum custom_keycodes {
     // os(default layer)
     OS_TGL = SAFE_RANGE,
     DEF_IME,
+    KC_MISSION_CONTROL,
+    KC_LAUNCHPAD,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -64,7 +69,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
-    _______,    KC_F7,      KC_LCTL,    KC_LALT,    KC_LGUI,                                                        _______,    _______,    _______,    _______,    _______,
+    MO(L_MAC_FN), KC_F7,    KC_LCTL,    KC_LALT,    KC_LGUI,                                                        _______,    _______,    _______,    _______,    _______,
 
                                                                 KC_APP,     _______,        _______,    _______,
                                                                             _______,        _______,
@@ -93,6 +98,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,    _______,    _______,    _______,    _______,                                                        _______,    KC_P0,      _______,    KC_PDOT,    KC_PPLS,
 
                                                                 _______,    _______,        KC_HOME,    KC_END,
+                                                                            _______,        _______,
+                                                    _______,    _______,    _______,        _______,    _______,    _______
+),
+
+[L_MAC_FN] = LAYOUT_ergodox_pretty(
+    // left hand
+    _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
+    _______,    KC_BRID,    KC_BRIU,    KC_MCTL,    KC_LPAD,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
+    _______,    _______,    _______,    KC_MPRV,    KC_MPLY,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
+    _______,    KC_MNXT,    KC_MUTE,    KC_VOLD,    KC_VOLU,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
+    _______,    _______,    _______,    _______,    _______,                                                        _______,    _______,    _______,    _______,    _______,
+
+                                                                _______,    _______,        _______,    _______,
                                                                             _______,        _______,
                                                     _______,    _______,    _______,        _______,    _______,    _______
 ),
@@ -162,7 +180,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
-
+        case KC_MISSION_CONTROL:
+            if (record->event.pressed) {
+                host_consumer_send(0x29F);
+            } else {
+                host_consumer_send(0);
+            }
+            return false;  // Skip all further processing of this key
+        case KC_LAUNCHPAD:
+            if (record->event.pressed) {
+                host_consumer_send(0x2A0);
+            } else {
+                host_consumer_send(0);
+            }
+            return false;  // Skip all further processing of this key
+            break;
         //--layers--
         //os(default layer)
         case OS_TGL:
