@@ -1,15 +1,12 @@
 #include QMK_KEYBOARD_H
 #include "version.h"
+#include "keymap_japanese.h"
 
 // Fillers to make layering clearer
-#define _______ KC_TRNS
-#define XXXXXXX KC_NO
 #define KCRDP_TAB LALT(KC_PGUP)
 #define KCRDP_WIN LALT(KC_HOME)
 #define KCRDP_PSCR LALT(LCTL(KC_PPLS))
 #define KCRDP_BRK LALT(LCTL(KC_BRK))
-#define KC_MCTL KC_MISSION_CONTROL
-#define KC_LPAD KC_LAUNCHPAD
 
 enum layers {
     L_COMMON = 0,
@@ -22,18 +19,13 @@ enum layers {
     L_CONF,
 };
 
-//Tap Dance Declarations
-enum taps {
-  TD_LANG = 0
-};
-
 enum custom_keycodes {
     //--layers--
     // os(default layer)
     OS_TGL = SAFE_RANGE,
     DEF_IME,
-    KC_MISSION_CONTROL,
-    KC_LAUNCHPAD,
+    X_MCTL,
+    X_LPAD,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -42,7 +34,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_ESC,     KC_1,       KC_2,       KC_3,       KC_4,       KC_5,       MO(L_CONF),     _______,    KC_6,       KC_7,       KC_8,       KC_9,       KC_0,       _______,
     KC_TAB,     _______,    _______,    _______,    _______,    _______,    _______,        KC_UP,      _______,    _______,    _______,    _______,    _______,    _______,
     MO(L_FUNC), _______,    _______,    _______,    _______,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
-    KC_LSFT,    _______,    _______,    _______,    _______,    _______,    KC_DELT,        KC_DOWN,    _______,    _______,    _______,    _______,    _______,    _______,
+    KC_LSFT,    _______,    _______,    _______,    _______,    _______,    KC_DEL,         KC_DOWN,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,                                                        KC_BSPC,    _______,    _______,    _______,    _______,
 
                                                                 _______,    _______,        KC_LEFT,    KC_RGHT,
@@ -60,7 +52,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                                                                 KC_APP,     KC_PSCR,        _______,    _______,
                                                                             KC_BRK,         _______,                                                                   
-                                                    _______,    KC_MHEN,    DEF_IME,        _______,    KC_HENK,    _______
+                                                    _______,    JP_MHEN,    DEF_IME,       _______,    JP_HENK,    _______
 ),
 
 [L_MAC] = LAYOUT_ergodox_pretty(
@@ -73,7 +65,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
                                                                 KC_APP,     _______,        _______,    _______,
                                                                             _______,        _______,
-                                                    _______,    KC_LANG2,   _______,        _______,    KC_LANG1,    _______
+                                                    _______,    KC_LNG2,    _______,        _______,    KC_LNG1,    _______
 ),
 
 [L_QWERTY] = LAYOUT_ergodox_pretty(
@@ -82,7 +74,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,    KC_Q,       KC_W,       KC_E,       KC_R,       KC_T,       _______,        _______,    KC_Y,       KC_U,       KC_I,       KC_O,       KC_P,       KC_MINS,
     _______,    KC_A,       KC_S,       KC_D,       KC_F,       KC_G,                                   KC_H,       KC_J,       KC_K,       KC_L,       KC_SCLN,    KC_RBRC,
     _______,    KC_Z,       KC_X,       KC_C,       KC_V,       KC_B,       _______,        _______,    KC_N,       KC_M,       KC_COMM,    KC_DOT,     KC_QUOT,    KC_BSLS,
-    _______,    _______,    _______,    _______,    _______,                                _______,    KC_LBRC,    KC_EQL,     KC_JYEN,    KC_INT1,
+    _______,    _______,    _______,    _______,    _______,                                _______,    KC_LBRC,    KC_EQL,     JP_YEN,    KC_INT1,
 
                                                                 _______,    _______,        _______,    _______,
                                                                             _______,        _______,
@@ -94,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    KC_F1,      KC_F2,      KC_F3,      KC_F4,      _______,    _______,        KC_PGUP,    _______,    _______,    KC_P7,      KC_P8,      KC_P9,      KC_PSLS,
     _______,    KC_F5,      KC_F6,      KC_F7,      KC_F8,      _______,                                _______,    _______,    KC_P4,      KC_P5,      KC_P6,      KC_PAST,
-    _______,    KC_F9,      KC_F10,     KC_F11,     KC_F12,     _______,    _______,        KC_PGDOWN,  _______,    _______,    KC_P1,      KC_P2,      KC_P3,      KC_PMNS,
+    _______,    KC_F9,      KC_F10,     KC_F11,     KC_F12,     _______,    _______,        KC_PGDN,    _______,    _______,    KC_P1,      KC_P2,      KC_P3,      KC_PMNS,
     _______,    _______,    _______,    _______,    _______,                                                        _______,    KC_P0,      _______,    KC_PDOT,    KC_PPLS,
 
                                                                 _______,    _______,        KC_HOME,    KC_END,
@@ -105,7 +97,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [L_MAC_FN] = LAYOUT_ergodox_pretty(
     // left hand
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
-    _______,    KC_BRID,    KC_BRIU,    KC_MCTL,    KC_LPAD,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
+    _______,    KC_BRID,    KC_BRIU,    KC_MCTL,    KC_LPAD,     _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    KC_MPRV,    KC_MPLY,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
     _______,    KC_MNXT,    KC_MUTE,    KC_VOLD,    KC_VOLU,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,                                                        _______,    _______,    _______,    _______,    _______,
@@ -129,7 +121,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [L_CONF] = LAYOUT_ergodox_pretty(
     // left hand
-    _______,    _______,    _______,    _______,    _______,    _______,    _______,        OS_TGL,     _______,    _______,    _______,    _______,    _______,    RESET,
+    _______,    _______,    _______,    _______,    _______,    _______,    _______,        OS_TGL,     _______,    _______,    _______,    _______,    _______,    QK_BOOT,
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,                                _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
@@ -180,14 +172,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
-        case KC_MISSION_CONTROL:
+        case X_MCTL:
             if (record->event.pressed) {
                 host_consumer_send(0x29F);
             } else {
                 host_consumer_send(0);
             }
             return false;  // Skip all further processing of this key
-        case KC_LAUNCHPAD:
+        case X_LPAD:
             if (record->event.pressed) {
                 host_consumer_send(0x2A0);
             } else {
