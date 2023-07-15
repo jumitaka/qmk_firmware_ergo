@@ -24,8 +24,10 @@ enum custom_keycodes {
     // os(default layer)
     OS_TGL = SAFE_RANGE,
     DEF_IME,
-    X_MCTL,
-    X_LPAD,
+    W_IMEOFF,
+    W_IMEON,
+    M_MCTL,
+    M_LPAD,
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -51,8 +53,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,    KC_F7,      KC_LGUI,    KC_LALT,    KC_LCTL,                                                        _______,    _______,    _______,    _______,    _______,
 
                                                                 KC_APP,     KC_PSCR,        _______,    _______,
-                                                                            KC_BRK,         _______,                                                                   
-                                                    _______,    JP_MHEN,    DEF_IME,       _______,    JP_HENK,    _______
+                                                                            KC_BRK,         _______,
+                                                    _______,    W_IMEOFF,   DEF_IME,        _______,    W_IMEON,    _______
 ),
 
 [L_MAC] = LAYOUT_ergodox_pretty(
@@ -107,7 +109,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                     _______,    _______,    _______,        _______,    _______,    _______
 ),
 
-[L_NAV] = LAYOUT_ergodox_pretty(    
+[L_NAV] = LAYOUT_ergodox_pretty(
     // left hand
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
     _______,    _______,    KC_UP,      _______,    _______,    _______,    _______,        KC_WH_U,    _______,    _______,    KC_MS_U,    _______,    _______,    _______,
@@ -172,20 +174,44 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
-        case X_MCTL:
+        case M_MCTL:
             if (record->event.pressed) {
-                host_consumer_send(0x29F);
+                host_consumer_send(0x29F);  // TODO:
             } else {
                 host_consumer_send(0);
             }
             return false;  // Skip all further processing of this key
-        case X_LPAD:
+        case M_LPAD:
             if (record->event.pressed) {
-                host_consumer_send(0x2A0);
+                host_consumer_send(0x2A0);  // TODO:
             } else {
                 host_consumer_send(0);
             }
             return false;  // Skip all further processing of this key
+            break;
+        case W_IMEOFF:
+            if (record->event.pressed) {
+                register_code (JP_MHEN);
+                register_code (KC_LNG2);    // 英語キーボードの場合、VK26を無変換にremap(PowerToysなどを使用)
+            }
+            else
+            {
+                unregister_code (KC_LNG2);
+                unregister_code (JP_MHEN);
+            }
+            return false;
+            break;
+        case W_IMEON:
+            if (record->event.pressed) {
+                register_code (JP_HENK);
+                register_code (KC_LNG1);    // 英語キーボードの場合、VK22を変換にremap(PowerToysなどを使用)
+            }
+            else
+            {
+                unregister_code (KC_LNG1);
+                unregister_code (JP_HENK);
+            }
+            return false;
             break;
         //--layers--
         //os(default layer)
