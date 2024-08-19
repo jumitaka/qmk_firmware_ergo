@@ -26,7 +26,10 @@ enum custom_keycodes {
     DEF_IME,
     W_IMEOFF,
     W_IMEON,
+    MOUSE_JIGGLER,
 };
+
+bool mouse_jiggle_mode = false; // JIGGLE Flag
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [L_COMMON] = LAYOUT_ergodox_pretty(
@@ -109,7 +112,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [L_NAV] = LAYOUT_ergodox_pretty(
     // left hand
-    _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    _______,
+    _______,    _______,    _______,    _______,    _______,    _______,    _______,        _______,    _______,    _______,    _______,    _______,    _______,    MOUSE_JIGGLER,
     _______,    _______,    KC_UP,      _______,    _______,    _______,    _______,        KC_WH_U,    _______,    _______,    KC_MS_U,    _______,    _______,    _______,
     _______,    KC_LEFT,    KC_DOWN,    KC_RGHT,    _______,    _______,                                _______,    KC_MS_L,    KC_MS_D,    KC_MS_R,    _______,    _______,
     _______,    _______,    _______,    _______,    _______,    _______,    _______,        KC_WH_D,    _______,    _______,    _______,    _______,    _______,    _______,
@@ -199,8 +202,30 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             }
             return false;
             break;
+        case MOUSE_JIGGLER:
+            if (record->event.pressed) {
+                if (mouse_jiggle_mode) {
+                    SEND_STRING(SS_DELAY(15));
+                    mouse_jiggle_mode = false;
+                } else {
+                    SEND_STRING(SS_DELAY(15));
+                    mouse_jiggle_mode = true;
+                }
+            }
+            break;
   }
   return true;
+}
+
+void matrix_scan_user(void){
+    if (mouse_jiggle_mode) {
+        SEND_STRING(SS_DELAY(10));
+        tap_code(KC_MS_UP);
+        tap_code(KC_MS_DOWN);
+        SEND_STRING(SS_DELAY(30));
+        tap_code(KC_MS_LEFT);
+        tap_code(KC_MS_RIGHT);
+    }
 }
 
 // Runs just one time when the keyboard initializes.
